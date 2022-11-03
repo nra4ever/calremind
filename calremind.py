@@ -21,10 +21,12 @@ class CalHandler(hass.Hass):
         self.maxEvents = 3
         #how many hours before appointment should event be added to sensor
         self.hoursaway = 48
-        #second field (01 in the default case) represents minute past the hour the script will run
-        rt = time(00, 35, 0)
+        #second field (1 in the default case) represents minute past the hour the script will run
+        rt = time(00, 29, 0)
         #changing the "sensor.calremind" value below will allow you to change the name of the generated sensor
         self.calremind = self.get_entity('sensor.calremind')
+        #Changing this value to 1 will make sensor attribute indices begin at 1 instead of 0
+        self.indexOffset = 0
         ###############################################
         #              USER CONFIG ENDS!!!            #
         ###############################################
@@ -61,23 +63,28 @@ class CalHandler(hass.Hass):
                 appTime = appointment['start']['dateTime'][:-9]
                 ato = datetime.strptime(appTime, "%Y-%m-%dT%H:%M")
                 appDate_hr = datetime.strftime(ato, "%a %d %b")
+                #if location is provided, load it into location variable
+                location = ""
+                if appointment["location"]:
+                    location = appointment["location"]
                 #Publish sensor
                 self.log("Publishing " + appointment["summary"] + " event to sensor.")
                 self.calremind.set_state(state=arrlen, attributes= { \
-                    "event{}".format(i): "on",
-                    "name{}".format(i): appointment["summary"],
-                    "date{}".format(i): appDate_hr,
-                    "time{}".format(i): appTime.split('T')[1],
+                    "event{}".format(str(i + self.indexOffset)): "on",
+                    "name{}".format(str(i + self.indexOffset)): appointment["summary"],
+                    "date{}".format(str(i + self.indexOffset)): appDate_hr,
+                    "time{}".format(str(i + self.indexOffset)): appTime.split('T')[1],
+                    "location{}".format(str(i + self.indexOffset)): location
                 })
-                #if list under maximum, set higher states to off
-                if len(self.eventArr) < 3:
+            #if list under maximum, set higher states to off
+            if len(self.eventArr) < 3:
+                self.calremind.set_state(state=arrlen, attributes= { \
+                    "event{}".format(2 + self.indexOffset): "off"})
+                if len(self.eventArr) < 2:
                     self.calremind.set_state(state=arrlen, attributes= { \
-                        "event2": "off"})
-                    if len(self.eventArr) < 2:
-                        self.calremind.set_state(state=arrlen, attributes= { \
-                            "event1": "off"})
+                        "event{}".format(1 + self.indexOffset): "off"})
         # If list is empty, set all states to off
         else:
-            for i in self.maxEvents:
+            for i in range(0, self.maxEvents - 1):
                 self.calremind.set_state(state="0", attributes={ \
-                    "event{}".format(i): "off"})
+                    "event{}".format(str(i + self.indexOffset)): "off"})
