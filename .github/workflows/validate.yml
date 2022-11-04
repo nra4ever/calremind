@@ -13,4 +13,4 @@ jobs:
       - name: HACS Action
         uses: "hacs/action@main"
         with:
-          category: "python_script"
+          category: "appdaemon"
