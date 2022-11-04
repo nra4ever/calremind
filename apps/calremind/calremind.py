@@ -5,30 +5,39 @@ import json
 
 class CalHandler(hass.Hass):
     def initialize(self):
-        ###############################################
-        #               USER CONFIG BELOW             #
-        ###############################################
         #HA Server IP
-        self.serverip = "192.168.1.122"
+        self.serverip = self.args['server_ip']
         #HA Port
-        self.serverport = "8123"
+        port = "8123"
+        if self.args['ha_port']:
+            port = self.args['ha_port']
+        self.serverport = port
         #Long lived access token from HA
-        self.apikey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI0NDAyZjczN2UyMDM0ZDRiYmRiOWEzNTM1YzFjYjA2YiIsImlhdCI6MTY2NzI3NjkxNywiZXhwIjoxOTgyNjM2OTE3fQ.H6LoBa6vRiQ8cwwMTqUcAIaUl2DsIrtgYcjmtshjxuo"
+        self.apikey = self.args['ha_token']
         #entity ID of HA calendar
-        self.calID = "calendar.work"
+        self.calID = self.args['calendar_id']
         #max number of upcoming events to handle
-        self.maxEvents = 3
+        maxe = 3
+        if self.args['max_events']:
+            maxe = self.args['max_events']
+        self.maxEvents = maxe
         #how many hours before appointment should event be added to sensor
-        self.hoursaway = 48
+        haway = 48
+        if self.arges['hours_away']:
+            haway = self.args['hours_away']
+        self.hoursaway = haway
         #second field (1 in the default case) represents minute past the hour the script will run
         rt = time(00, 29, 0)
         #changing the "sensor.calremind" value below will allow you to change the name of the generated sensor
-        self.calremind = self.get_entity('sensor.calremind')
-        #Changing this value to 1 will make sensor attribute indices begin at 1 instead of 0
-        self.indexOffset = 0
-        ###############################################
-        #              USER CONFIG ENDS!!!            #
-        ###############################################
+        sens = 'sensor.calremind'
+        if self.args['sensor_id']:
+            sens = self.args['sensor_id']        
+        self.calremind = self.get_entity(sens)
+        #Changing this value to 1 will make sensor attribute indices begin at 1 instead of 
+        ioff = 0
+        if self.arges['index_offset']:
+            ioff = self.args['index_offset']
+        self.indexOffset = ioff
         #callback hook
         self.run_hourly(self.calcheck, rt)
         #set headers for REST api
