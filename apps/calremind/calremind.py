@@ -23,7 +23,7 @@ class CalHandler(hass.Hass):
         self.maxEvents = maxe
         #how many hours before appointment should event be added to sensor
         haway = 48
-        if self.arges["hours_away"]:
+        if self.args["hours_away"]:
             haway = self.args["hours_away"]
         self.hoursaway = haway
         #second field (1 in the default case) represents minute past the hour the script will run
@@ -35,7 +35,7 @@ class CalHandler(hass.Hass):
         self.calremind = self.get_entity(sens)
         #Changing this value to 1 will make sensor attribute indices begin at 1 instead of 
         ioff = 0
-        if self.arges["index_offset"]:
+        if self.args["index_offset"]:
             ioff = self.args["index_offset"]
         self.indexOffset = ioff
         #callback hook
