@@ -1,9 +1,9 @@
 ## App configuration
 
 ```yaml
-hacs:
+calremind:
     module: calremind
-    class: calremind
+    class: CalHandler
     server_ip: "192.168.1.122"
     ha_port: "8123"
     ha_token: "your HA token goes here"
