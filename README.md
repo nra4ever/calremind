@@ -9,7 +9,7 @@ Download the `calremind` directory from inside the `apps` directory here to your
 ## App configuration
 
 ```yaml
-hacs:
+calremind:
     module: calremind
     class: calremind
     server_ip: "192.168.1.122"
