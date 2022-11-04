@@ -1,6 +1,5 @@
 import appdaemon.plugins.hass.hassapi as hass
 from datetime import datetime, timedelta, time
-import schedule
 from requests import get
 import json
 
