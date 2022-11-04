@@ -28,8 +28,8 @@ key | optional | type | default | description
 `class`    | False | string | | The name of the Class.
 `server_ip`| False | string | | the IP of the Home Assistant Installation.
 `ha_port`  | True  | string | `8123` | The Port of the Home Assistant Installation.
-`ha_token` | False | string | A Long Lived Access Token for HA.
-`calendar_id`| False | string | The ID of the Calendar to Track Upcoming Events for.
+`ha_token` | False | string | | A Long Lived Access Token for HA.
+`calendar_id`| False | string | | The ID of the Calendar to Track Upcoming Events for.
 `max_events`| True | integer | `3` | Amount of Upcoming Events to Track at Once.
 `hours_away`| True | integer | `48` | Amount of Hours to Look Ahead for Events.
 `sensor_id` | True | string | `sensor.calremind` | The Entity ID for the Published Sensor.
