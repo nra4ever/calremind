@@ -1,5 +1,5 @@
 # CalRemind
-
+![screenshot of generated sensor in HA developer tools](https://github.com/nra4ever/calremind/raw/main/sensor.png)
 A sensor based system to facilitate processing and displaying upcoming calendar events.
 
 ## Installation
